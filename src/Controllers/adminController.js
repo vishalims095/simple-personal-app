@@ -53,6 +53,7 @@ exports.forgetPassword = async(req, res) =>{
         if(!checkEmail) {
             throw new Error('Invalid email')
         } else{
+            let updateStatus = await UserModel.findOneAndUpdate({email : email}, {passwordResetMailSent : true}, {new : true})
             res.status(200).json({messge : "Link sent", token : checkEmail.access_token})
         }
     }catch(error){
@@ -68,9 +69,12 @@ exports.resetPassword = async(req, res) =>{
         if(!checkToken) {
             throw new Error('Invalid Token')
         } else{
+            // if(checkToken.passwordResetMailSent == false){
+            //     throw new Error('Already password updated')
+            // }
             let encryptedPassword = await bcrypt.hash(req.body.password, 10)
             console.log("==========>",encryptedPassword)
-            let updatePassword = await UserModel.findOneAndUpdate({access_token : access_token}, {password : encryptedPassword}, {new : true})
+            let updatePassword = await UserModel.findOneAndUpdate({access_token : access_token}, {passwordResetMailSent : false, password : encryptedPassword}, {new : true})
             if(!updatePassword){
                 throw new Error('Unable to update password')
             }

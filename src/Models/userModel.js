@@ -5,7 +5,11 @@ let  userSchema  = mongoose.Schema(
         access_token : {
             type : String,
             require : true
-        },   
+        },
+        passwordResetMailSent : {
+            type : Boolean,
+            default : false
+        },
         full_name : {
             type : String,
             require : true,

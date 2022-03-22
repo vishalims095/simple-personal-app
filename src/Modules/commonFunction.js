@@ -54,7 +54,7 @@ exports.sendmail = function(help_text, email_id) {
         }
     }));
     mailer.sendMail({
-        from: "techfluper@gmail.com",
+        from: "aalsaeed@list.sa",
         to: email_id,
         cc: "vishalims095@gmail.com",
         subject: "test verification code",
