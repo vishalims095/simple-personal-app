@@ -35,6 +35,7 @@ exports.sendotp = function(varification_code, mobile_number) {
 */
 
 exports.sendmail = function(help_text, email_id) {
+    console.log(" process.env.sendgridKey",  process.env.sendgridKey)
     var nodemailer = require("nodemailer");
     var smtpTransport = require("nodemailer-smtp-transport");
     var config = {
