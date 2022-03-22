@@ -80,3 +80,11 @@ exports.resetPassword = async(req, res) =>{
         res.status(403).json({"message" : error.message})
     }
 }
+exports.sendMail = async(req, res) =>{
+    try{
+        commFunc.sendmail("hi vishal", "vishallsharma07@gmail.com")
+        res.status(200).json({message : "mail sent"})
+    }catch(error){
+        console.log(error)
+    }
+}

@@ -19,6 +19,7 @@
     "cors": "^2.8.4",
     "currency-symbol": "^1.0.6",
     "currency-symbol-map": "^4.0.4",
+    "dotenv": "^16.0.0",
     "express": "^4.16.4",
     "fcm-node": "^1.2.1",
     "fcm-push": "^1.1.3",

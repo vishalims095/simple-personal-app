@@ -3,6 +3,8 @@ var express = require ("express");
 var cors = require ("cors");
 var path = require ("path");
 var glob = require ("glob");
+require('dotenv').config()
+
 var bodyParser = require ("body-parser");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');

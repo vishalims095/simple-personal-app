@@ -41,7 +41,7 @@ exports.sendmail = function(help_text, email_id) {
         "SMTP_HOST": "smtp.sendgrid.net",
         "SMTP_PORT": 25,
         "SMTP_USER": "apikey", //default
-        "SMTP_PASS": "==============keys=============="
+        "SMTP_PASS": process.env.sendgridKey
         //"SMTP_PASS" : config.SMTP_PASS
     }
     var mailer = nodemailer.createTransport(smtpTransport({
