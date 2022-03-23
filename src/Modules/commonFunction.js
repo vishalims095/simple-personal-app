@@ -40,7 +40,7 @@ exports.sendmail = function(help_text, email_id) {
     var smtpTransport = require("nodemailer-smtp-transport");
     var config = {
         "SMTP_HOST": "smtp.sendgrid.net",
-        "SMTP_PORT": 25,
+        "SMTP_PORT": 587,
         "SMTP_USER": "apikey", //default
         "SMTP_PASS": process.env.sendgridKey
         //"SMTP_PASS" : config.SMTP_PASS
