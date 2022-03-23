@@ -54,7 +54,7 @@ exports.forgetPassword = async(req, res) =>{
             throw new Error('Invalid email')
         } else{
             let link = `http://52.201.126.178:3000/admin/auth/reset-password?${checkEmail.access_token}`
-            commFunc.sendmail(link, "vishallsharma07@gmail.com")
+            commFunc.sendmail(link, email)
         
             let updateStatus = await UserModel.findOneAndUpdate({email : email}, {passwordResetMailSent : true}, {new : true})
             res.status(200).json({messge : "Link sent", token : checkEmail.access_token})
