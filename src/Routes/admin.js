@@ -24,4 +24,7 @@ exports.getRouter = (app) => {
     app.route("/admin/forgetPassword").post(admin.forgetPassword);
     app.route("/admin/resetPassword").post(admin.resetPassword);
     app.route("/admins/sendMail").get(admin.sendMail);
+    app.route("/admin/checkResetPassword").post(admin.checkResetPassword);
+    
+    
 }

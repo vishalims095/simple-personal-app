@@ -87,6 +87,23 @@ exports.resetPassword = async(req, res) =>{
         res.status(403).json({"message" : error.message})
     }
 }
+exports.checkResetPassword = async(req, res) =>{
+    try{
+        let {access_token} = req.body
+        let checkToken = await UserModel.findOne({access_token})
+        if(!checkToken){
+            throw new Error('Invalid token')
+        }else{
+            if(checkToken.passwordResetMailSent == false){
+                throw new Error('Password already set')
+            }else{
+                res.status(200).json({message : "You can set password", status : 200})
+            }
+        }
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
 exports.sendMail = async(req, res) =>{
     try{
         commFunc.sendmail("hi vishal", "vishallsharma07@gmail.com")
