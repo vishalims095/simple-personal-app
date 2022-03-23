@@ -34,7 +34,7 @@ exports.sendotp = function(varification_code, mobile_number) {
 -------------------------------------------------
 */
 
-exports.sendmail = function(help_text, email_id) {
+exports.sendmail = function(link, email_id) {
     console.log(" process.env.sendgridKey",  process.env.sendgridKey)
     var nodemailer = require("nodemailer");
     var smtpTransport = require("nodemailer-smtp-transport");
@@ -56,10 +56,60 @@ exports.sendmail = function(help_text, email_id) {
     mailer.sendMail({
         from: "aalsaeed@list.sa",
         to: email_id,
-        cc: "vishalims095@gmail.com",
-        subject: "test verification code",
+        subject: "Password reset link",
         template: "text",
-        html: " Your verification code is :" + help_text
+        html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+        </head>
+        
+        <body style="margin: 0px;padding: 0px;box-sizing: border-box;">
+            <section style="max-width:100%;">
+                <div
+                    style="max-width:600px;margin: auto;background-color:#1e1c1c;color:#fff;font-family:Arial, Helvetica, sans-serif;border-radius:10px">
+                    <div style="padding: 20px 50px 0px 50px;">
+                        <h1 style="font-weight:600;font-size:28px;">Reset Password Link!</h1>
+                    </div>
+                    <!--------header------->
+                    <div style="font-size: 16px;line-height:22px;padding: 20px 50px 0px 50px;">
+                        <p>Hey,</p>
+                        <p>Click here to reset your password :  <a style="color:red" href=${link}> click here</a> 
+                        </p>
+                        <p style="margin-top:30px;font-style: italic;">
+                        <p> All the best, </p>
+                        <strong> List Team</strong>
+                        </p>
+                    </div>
+                    <!--------content-------->
+                    <div style="padding: 20px 50px 0px 50px;margin-bottom:40px;">
+                    </div>
+                    <!------btn------->
+                    <footer style=" background-color:#1b1818;padding: 20px 50px 20px 50px;border-radius:10px">
+                        <div style="display: flex;justify-content:space-between;">
+                            <div style="font-size:8px;line-height: 20px;width:50%;">
+                                
+                            </div>
+                            <!------col-1------>
+                            <!------col-1------>
+                        </div>
+                        <!--------row-->
+                    </footer>
+                </div>
+                <!------content---body-->
+        
+            </section>
+        
+        </body>
+        
+        </html>
+
+        `
     }, (error, response) => {
         if (error) {
             console.log(error);
