@@ -34,6 +34,11 @@ let  subscriptionSchema  = mongoose.Schema(
             type : String,
             require : true,
             default : "N/A"          
+        },
+        price : {
+            type : Number,
+            require : true,
+            default : 0          
         }
 
     },

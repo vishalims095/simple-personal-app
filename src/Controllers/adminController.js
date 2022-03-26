@@ -108,7 +108,8 @@ exports.checkResetPassword = async(req, res) =>{
 
 exports.createSubscription = async(req, res) =>{
     try {
-        let {planName, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
+        console.log("create subscription", req.body)
+        let {price , planName, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
         let checkSubscription = await subscriptionModel.findOne({planName : {$regex : planName, $options : 'i'}})
         if(checkSubscription){
             throw new Error('Subcription name already exist')
@@ -153,7 +154,8 @@ exports.removeSubscription = async(req, res) =>{
 
 exports.editSubscription = async(req, res) =>{
     try {
-        let {id, planName, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
+        let {id, planName,price, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
+        console.log("edit", req.body)
         let getMyData = await subscriptionModel.findOne({_id : id})
         if(!getMyData){
             throw new Error('No data')
