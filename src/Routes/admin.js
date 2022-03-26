@@ -23,8 +23,13 @@ exports.getRouter = (app) => {
     app.route("/admin/login").post(admin.login);
     app.route("/admin/forgetPassword").post(admin.forgetPassword);
     app.route("/admin/resetPassword").post(admin.resetPassword);
-    app.route("/admins/sendMail").get(admin.sendMail);
     app.route("/admin/checkResetPassword").post(admin.checkResetPassword);
+
+    
+    app.route("/admin/createSubscription").post(admin.createSubscription);
+    app.route("/admin/getSubscription").post(admin.getSubscription);
+    app.route("/admin/removeSubscription").post(admin.removeSubscription);
+    app.route("/admin/editSubscription").post(admin.editSubscription);
     
     
 }

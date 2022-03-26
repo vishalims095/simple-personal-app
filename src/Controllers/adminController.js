@@ -3,6 +3,7 @@ var commFunc = require('../Modules/commonFunction');
 var bcrypt = require('bcryptjs');
 const e = require('express');
 var salt = bcrypt.genSaltSync(10);
+const {subscriptionModel} = require('../Models/subscriptionModel')
 
 
 exports.signup = async(req, res) => {
@@ -104,11 +105,71 @@ exports.checkResetPassword = async(req, res) =>{
         res.status(403).json({message : error.message})
     }
 }
-exports.sendMail = async(req, res) =>{
-    try{
-        commFunc.sendmail("hi vishal", "vishallsharma07@gmail.com")
-        res.status(200).json({message : "mail sent"})
+
+exports.createSubscription = async(req, res) =>{
+    try {
+        let {planName, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
+        let checkSubscription = await subscriptionModel.findOne({planName : {$regex : planName, $options : 'i'}})
+        if(checkSubscription){
+            throw new Error('Subcription name already exist')
+        }
+        let data = req.body
+        data['createdAt'] = Math.round(new Date().getTime()/1000)
+
+        let saveSubscription = new subscriptionModel(data)
+        let createSubscription = await saveSubscription.save()
+        res.status(200).json({message : "Subscription created", data : createSubscription})
     }catch(error){
-        console.log(error)
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.getSubscription = async(req, res) =>{
+    try{
+        let {id} = req.body
+        if(id){
+            let data = await subscriptionModel.findOne({_id : id})
+            res.status(200).json({message : "Data", data : data})
+        }else{
+            let data = await subscriptionModel.find({}).sort({_id : -1})
+            res.status(200).json({message : "Data", data : data})
+        }
+        
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
+exports.removeSubscription = async(req, res) =>{
+    try{
+        let {subscriptionId} = req.body
+        let data = await subscriptionModel.remove({_id : subscriptionId})
+        res.status(200).json({message : "Removed successfully"})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.editSubscription = async(req, res) =>{
+    try {
+        let {id, planName, categoryAllowed, timeLineType, totalTimeline, orderAllowed, planDetails} = req.body
+        let getMyData = await subscriptionModel.findOne({_id : id})
+        if(!getMyData){
+            throw new Error('No data')
+        }
+        if(planName != getMyData.planName){
+            let checkSubscription = await subscriptionModel.findOne({planName : {$regex : planName, $options : 'i'}})
+            if(checkSubscription){
+                throw new Error('Subcription name already exist')
+            }
+        }
+        let data = req.body
+        let updateData = await subscriptionModel.findOneAndUpdate({_id : id}, data, {new : true})
+        if(!updateData){
+            throw new Error('Unable to update')
+        } res.status(200).json({data : updateData, "message" : "Data updated"})
+    }catch(error){
+        res.status(403).json({message : error.message})
     }
 }
