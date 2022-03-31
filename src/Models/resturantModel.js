@@ -24,7 +24,36 @@ const resturantSchema = mongoose.Schema({
     image : {
         type : String,
         default : ''
+    },
+    
+    createdAt : {
+        type : String,
+        require : true,
+        default : "N/A"          
+    },
+    isVerified : {
+        type : Boolean,
+        require : true,
+        default : false          
+    },
+    isActive : {
+        type : Boolean,
+        require : true,
+        default : true          
+    },
+    passwordResetMailSent : {
+        type : Boolean,
+        default : false
+    },
+    password : {
+        type : String,
+        default : ''
+    },
+    access_token : {
+        type : String,
+        default : ''
     }
+   
 },{
     strict: true,
     collection: 'resturant',
