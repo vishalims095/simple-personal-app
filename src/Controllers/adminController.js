@@ -177,9 +177,42 @@ exports.editSubscription = async(req, res) =>{
 }
 exports.getResturantList = async(req, res) =>{
     try{
-        let data = await resturantModel.find({}).sort({_id : -1})
+        let {sort_type} = req.body
+        console.log(req.body)
+        let data = []
+        if(sort_type == 'aesc'){
+            data = await resturantModel.find({}).sort({name : 1})    
+        }else if(sort_type == 'desc'){
+            data = await resturantModel.find({}).sort({name : -1})
+        }else{
+            data = await resturantModel.find({}).sort({_id : -1})
+        }
         res.status(200).json({message : "Resturant list", data : data})
     }catch(error){
         res.status(403).json({message : error.message})
+    }
+}
+
+exports.approveRestaurant = async(req, res) =>{
+    try{
+        let {restaurant_id, status} = req.body
+        console.log("approve ========", req.body)
+        let data = await resturantModel.findOneAndUpdate({_id : restaurant_id}, {isVerified : status}, {new : true})
+        if(!data){
+            throw new Error('Unable to update')
+        }
+        res.status(200).json({message : "Resturant list", data : data})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.deleteRestaurant = async(req, res) =>{
+    try{
+        let {restaurant_id} = req.body
+        let deleteRestaurant = await resturantModel.remove({_id : restaurant_id})
+        res.status(200).json({message : "Restaurant removed"})
+    }catch(err){
+        res.status(403).json({message : err.message})
     }
 }

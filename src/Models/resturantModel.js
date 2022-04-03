@@ -1,6 +1,10 @@
 var{mongoose, conn} = require("../Modules/connection");
 var mongoosePaginate = require('mongoose-paginate');
 const resturantSchema = mongoose.Schema({
+    id : {
+        type : Number,
+        default : 0
+    },
     name : {
         type : String,
         default : ''
