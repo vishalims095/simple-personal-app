@@ -17,13 +17,13 @@ const resturantSchema = mongoose.Schema({
         type : String,
         default : ''
     },
+    reg_no : {
+        type : String,
+        default : ''
+    },
     subscriptionId : {
         type : mongoose.Schema.ObjectId,
         ref : 'Subscription'
-    },
-    image : {
-        type : String,
-        default : ''
     },
     
     createdAt : {
@@ -50,6 +50,31 @@ const resturantSchema = mongoose.Schema({
         default : ''
     },
     access_token : {
+        type : String,
+        default : ''
+    },
+    commercial_image : {
+        type : String,
+        default : ''
+    },
+    tax_certificate : {
+        type : String,
+        default : ''
+    },
+    tax_number : {
+        type : String,
+        default : ''
+    },
+    
+    theme : {
+        type : String,
+        default : ''
+    },
+    national_id : {
+        type : String,
+        default : ''
+    },
+    national_id_img : {
         type : String,
         default : ''
     }

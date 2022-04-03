@@ -4,7 +4,7 @@ var bcrypt = require('bcryptjs');
 const e = require('express');
 var salt = bcrypt.genSaltSync(10);
 const {subscriptionModel} = require('../Models/subscriptionModel')
-
+const {resturantModel} = require('../Models/resturantModel')
 
 exports.signup = async(req, res) => {
     try{
@@ -171,6 +171,14 @@ exports.editSubscription = async(req, res) =>{
         if(!updateData){
             throw new Error('Unable to update')
         } res.status(200).json({data : updateData, "message" : "Data updated"})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+exports.getResturantList = async(req, res) =>{
+    try{
+        let data = await resturantModel.find({}).sort({_id : -1})
+        res.status(200).json({message : "Resturant list", data : data})
     }catch(error){
         res.status(403).json({message : error.message})
     }

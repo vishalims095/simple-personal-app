@@ -14,7 +14,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../src/Upload')));
+app.use(express.static(path.join(__dirname, '../src/public')));
+app.use(express.static(path.join(__dirname, '../src/public/resturant')));
 app.use(cors());
 const responseHandler = require('./Middlewares/responseHandler')
 app.use('/', responseHandler);
@@ -33,6 +34,13 @@ let initRoutes = () => {
 		app.get('/admin/*', (req, res) => {
 		res.sendFile(path.join(__dirname,'','newDist','dist' ,'index.html'));
 	})
+
+	app.use('/restaurant-web',express.static(path.join(__dirname, '' ,'newDist' ,'restaurant-web')));
+		app.get('/restaurant-web/*', (req, res) => {
+		res.sendFile(path.join(__dirname,'','newDist','restaurant-web' ,'index.html'));
+	})
+
+
 }
 initRoutes(app);
 const port = process.env.PORT || 3000;

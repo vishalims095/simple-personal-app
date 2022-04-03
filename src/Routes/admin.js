@@ -31,5 +31,7 @@ exports.getRouter = (app) => {
     app.route("/admin/removeSubscription").post(admin.removeSubscription);
     app.route("/admin/editSubscription").post(admin.editSubscription);
     
+    app.route("/admin/getResturantList").post(admin.getResturantList);
+    
     
 }

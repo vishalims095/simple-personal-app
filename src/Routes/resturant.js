@@ -21,10 +21,11 @@ exports.getRouter = (app) => {
     });
     let upload = multer({ storage: storage });
 
-    app.route('/resturant/resturantSignup').post(upload.any(), resturant.resturantSignup)
+    app.route('/resturant//resturantSignup').post(upload.any(), resturant.resturantSignup)
     app.route("/resturant/login").post(resturant.login);
 
     app.route("/resturant/forgetPassword").post(resturant.forgetPassword);
     app.route("/resturant/resetPassword").post(resturant.resetPassword);
     app.route("/resturant/checkResetPassword").post(resturant.checkResetPassword);
+    app.route("/resturant/getSubscription").post(resturant.getSubscription);
 }

@@ -1,23 +1,32 @@
 const {resturantModel} = require('../Models/resturantModel')
 var commFunc = require('../Modules/commonFunction');
 var bcrypt = require('bcryptjs');
+const {subscriptionModel} = require('../Models/subscriptionModel')
 
 exports.resturantSignup = async(req, res) =>{
     try{
-        let {name, address, email, phone, subscriptionId, password} = req.body
+        let {name, address, email,tax_number, national_id, national_id_img, phone, subscriptionId, password, tax_certificate, commercial_image, reg_no, theme} = req.body
         console.log(req.body)
-        
+        let data = req.body
+        let encryptedPassword = await bcrypt.hash(req.body.password, 10)
         data['password'] = encryptedPassword
         data['access_token'] =  commFunc.createJWT(new Date())
         let checkResturant = await resturantModel.findOne({$or : [{email : email}, {phone : phone}, {name : name}]})
         if(checkResturant){
             throw new Error('Resturant already exist')
         }
-        let data = req.body
         data['createdAt'] = Math.round(new Date().getTime()/1000)
         req.files.forEach((file) =>{
-            console.log(file.filename)
-            data['image'] = file.filename
+            if(file.fieldname == 'commercial_image'){
+                data['commercial_image'] = file.filename
+            }
+            if(file.fieldname == 'tax_certificate'){
+                data['tax_certificate'] = file.filename
+            }
+            if(file.fieldname == 'national_id_img'){
+                data['national_id_img'] = file.filename
+            }
+            
         })
         let saveData = new resturantModel(data)
         let createResturant = await saveData.save()
@@ -43,6 +52,9 @@ exports.login = async(req, res) =>{
             if(verifyPassword == false) {
                 throw new Error('Invalid credential')
             }else{
+                if(loginData.isVerified == false){
+                    return res.status(200).json({status : false, message : "Waiting for admin approval"})
+                }
                 let access_token =  commFunc.createJWT(new Date())
                 let updateToken = resturantModel.findOneAndUpdate({_id : loginData._id}, {access_token : access_token}, {new : true})
                 if(!updateToken){
@@ -110,6 +122,15 @@ exports.checkResetPassword = async(req, res) =>{
                 res.status(200).json({message : "You can set password", status : 200})
             }
         }
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.getSubscription = async (req, res) =>{
+    try {
+        let data = await subscriptionModel.find({})
+        res.status(200).json({data : data, message : "data"})
     }catch(error){
         res.status(403).json({message : error.message})
     }
