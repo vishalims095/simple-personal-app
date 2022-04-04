@@ -220,11 +220,56 @@ exports.addProduct = async(req, res) =>{
     }
 }
 
+
+exports.updateProduct = async(req, res) =>{
+    try {
+        let {product_id, product_name, restuarantId, product_code, product_price, product_description} = req.body
+        let data = req.body
+        req.files.forEach((file) =>{
+            if(file.fieldname == 'product_image'){
+                data['product_image'] = file.filename
+            }
+        })
+        let updateProduct = await productModel.findOneAndUpdate({_id : product_id}, data, {new : true})
+        if(!updateProduct){
+            throw new Error('Unable to update product details')
+        }
+        res.status(200).json({message : "product added", data : updateProduct})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
 exports.getProduct = async(req, res) =>{
     try{
         let {resturant_id} = req.body
         let data = await productModel.find({restuarantId : resturant_id})
-        res.status(200).json({message : "Resturant data", data : data})
+        res.status(200).json({message : "product data", data : data})
+    }catch(err){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
+exports.removeProduct = async(req, res) =>{
+    try{
+        let {product_id} = req.body
+        let data = await productModel.remove({_id : product_id})
+        res.status(200).json({message : "product removed", data : {}})
+    }catch(err){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.getProductDetails = async(req, res) =>{
+    try{
+        let {product_id} = req.body
+        let data = await productModel.findOne({_id : product_id})
+        if(!data){
+            throw new Error('No data found')
+        }
+        res.status(200).json({message : "product details", data : data})
     }catch(err){
         res.status(403).json({message : error.message})
     }

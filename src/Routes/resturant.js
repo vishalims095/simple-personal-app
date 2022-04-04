@@ -36,6 +36,9 @@ exports.getRouter = (app) => {
 
     
     app.route("/resturant/addProduct").post(upload.any(), resturant.addProduct);
+    app.route("/resturant/updateProduct").post(upload.any(), resturant.updateProduct);
     app.route("/resturant/getProduct").post( resturant.getProduct);
+    app.route("/resturant/removeProduct").post( resturant.removeProduct);
+    app.route("/resturant/getProductDetails").post( resturant.getProductDetails);
 
 }
