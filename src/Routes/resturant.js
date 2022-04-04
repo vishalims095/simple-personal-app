@@ -32,4 +32,10 @@ exports.getRouter = (app) => {
     app.route("/resturant/addCategory").post(resturant.addCategory);
     app.route("/resturant/categoryList").post(resturant.categoryList);
     app.route("/resturant/removeCategory").post(resturant.removeCategory);
+    app.route("/resturant/updateCategory").post(resturant.updateCategory);
+
+    
+    app.route("/resturant/addProduct").post(upload.any(), resturant.addProduct);
+    app.route("/resturant/getProduct").post( resturant.getProduct);
+
 }

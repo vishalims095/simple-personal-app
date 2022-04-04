@@ -3,6 +3,8 @@ var commFunc = require('../Modules/commonFunction');
 var bcrypt = require('bcryptjs');
 const {subscriptionModel} = require('../Models/subscriptionModel')
 const {categoryModel} = require ('../Models/categoryModel')
+const {productModel} = require ('../Models/productModel')
+const mongoose = require('mongoose')
 exports.resturantSignup = async(req, res) =>{
     try{
         let {name, address, email,tax_number, national_id, national_id_img, phone, subscriptionId, password, tax_certificate, commercial_image, reg_no, theme} = req.body
@@ -173,6 +175,57 @@ exports.removeCategory = async(req, res) =>{
         let data = await categoryModel.remove({_id : cat_id})
         res.status(200).json({message : "Category removed"})
     }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
+exports.updateCategory = async(req, res) =>{
+    try {
+        let {cat_id, category_name, parent_category, category_slug} = req.body
+        let data = req.body
+        let checkCatName = await categoryModel.findOne({category_name : category_name, _id : {$nin : [mongoose.Types.ObjectId(cat_id)]}})
+        if(checkCatName){
+            throw new Error('Category already exist')
+        }
+
+        let updateCategory = await categoryModel.findOneAndUpdate({_id : cat_id}, data, {new : true})
+        if(!updateCategory){
+            throw new Error('Unable to update category')
+        }
+        res.status(200).json({message : "Category updated", data : updateCategory})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
+exports.addProduct = async(req, res) =>{
+    try {
+        let {product_name, restuarantId, product_code, product_price, product_description} = req.body
+        let data = req.body
+        req.files.forEach((file) =>{
+            if(file.fieldname == 'product_image'){
+                data['product_image'] = file.filename
+            }
+        })
+        let saveData = new productModel(data)
+        let saveProduct = await saveData.save()
+        if(!saveData) {
+            throw new Error('Unable to add product')
+        }
+        res.status(200).json({message : "product added", data : saveData})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.getProduct = async(req, res) =>{
+    try{
+        let {resturant_id} = req.body
+        let data = await productModel.find({restuarantId : resturant_id})
+        res.status(200).json({message : "Resturant data", data : data})
+    }catch(err){
         res.status(403).json({message : error.message})
     }
 }
