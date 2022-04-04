@@ -28,4 +28,8 @@ exports.getRouter = (app) => {
     app.route("/resturant/resetPassword").post(resturant.resetPassword);
     app.route("/resturant/checkResetPassword").post(resturant.checkResetPassword);
     app.route("/resturant/getSubscription").post(resturant.getSubscription);
+
+    app.route("/resturant/addCategory").post(resturant.addCategory);
+    app.route("/resturant/categoryList").post(resturant.categoryList);
+    app.route("/resturant/removeCategory").post(resturant.removeCategory);
 }
