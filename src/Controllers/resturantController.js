@@ -142,6 +142,10 @@ exports.addCategory = async(req, res) =>{
     try {
         let {category_name, parent_category, category_slug} = req.body
         let data = req.body
+        let checkCatName = await categoryModel.findOne({category_name : category_name})
+        if(checkCatName){
+            throw new Error('Category already exist')
+        }
         let saveCategory = new categoryModel(data)
         let createCategory = await saveCategory.save()
         if(!createCategory){
@@ -166,7 +170,7 @@ exports.categoryList = async(req, res) =>{
 exports.removeCategory = async(req, res) =>{
     try{
         let {cat_id} = req.body
-        let data = await categoryModel.remove({})
+        let data = await categoryModel.remove({_id : cat_id})
         res.status(200).json({message : "Category removed"})
     }catch(error){
         res.status(403).json({message : error.message})
