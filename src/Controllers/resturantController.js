@@ -80,7 +80,7 @@ exports.forgetPassword = async(req, res) =>{
         if(!checkEmail) {
             throw new Error('Invalid email')
         } else{
-            let link = `http://52.201.126.178:3000/resturant-web/auth/reset-password?${checkEmail.access_token}`
+            let link = `http://52.201.126.178:3000/restaurant-web/auth/reset-password?${checkEmail.access_token}`
             commFunc.sendmail(link, email)
         
             let updateStatus = await resturantModel.findOneAndUpdate({email : email}, {passwordResetMailSent : true}, {new : true})
