@@ -216,3 +216,16 @@ exports.deleteRestaurant = async(req, res) =>{
         res.status(403).json({message : err.message})
     }
 }
+
+
+exports.getRestuarantDetails = async(req, res) =>{
+    try{
+        let {restaurant_id} = req.body
+        let data = await resturantModel.findOne({_id : restaurant_id})
+        if(!data){
+            throw new Error("No data found")
+        } res.status(200).json({message : "Restaurant details", data : data})
+    }catch(err){
+        res.status(403).json({message : err.message})       
+    }
+}

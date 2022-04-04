@@ -34,6 +34,7 @@ exports.getRouter = (app) => {
     app.route("/admin/getResturantList").post(admin.getResturantList);
     app.route("/admin/approveRestaurant").post(admin.approveRestaurant);
     app.route("/admin/deleteRestaurant").post(admin.deleteRestaurant);
+    app.route("/admin/getRestuarantDetails").post(admin.getRestuarantDetails);
     
     
 }
