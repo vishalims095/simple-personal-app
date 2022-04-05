@@ -18,6 +18,10 @@ let  productSchema  = mongoose.Schema(
             type : String,
             require : true
         },
+        product_quantity : {
+            type : String,
+            require : true
+        },
         product_price : {
             type : Number,
             require : true

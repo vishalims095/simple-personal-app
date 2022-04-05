@@ -202,7 +202,7 @@ exports.updateCategory = async(req, res) =>{
 
 exports.addProduct = async(req, res) =>{
     try {
-        let {product_name, restuarantId, product_code, product_price, product_description} = req.body
+        let {category_id, product_name,product_quantity, restuarantId, product_code, product_price, product_description} = req.body
         let data = req.body
         req.files.forEach((file) =>{
             if(file.fieldname == 'product_image'){
@@ -223,7 +223,7 @@ exports.addProduct = async(req, res) =>{
 
 exports.updateProduct = async(req, res) =>{
     try {
-        let {product_id, product_name, restuarantId, product_code, product_price, product_description} = req.body
+        let {product_id, category_id, product_quantity,product_name, restuarantId, product_code, product_price, product_description} = req.body
         let data = req.body
         req.files.forEach((file) =>{
             if(file.fieldname == 'product_image'){
@@ -243,8 +243,15 @@ exports.updateProduct = async(req, res) =>{
 
 exports.getProduct = async(req, res) =>{
     try{
-        let {resturant_id} = req.body
-        let data = await productModel.find({restuarantId : resturant_id})
+        let {resturant_id, sortType, search} = req.body
+        let data = []
+        if(sortType == 'aesc'){
+            data = await productModel.find({restuarantId : resturant_id, $or : [{product_name : {$regex : search, $options : 'i'}}]}).sort({product_name : 1})
+        }else if(sortType == 'desc'){
+            data = await productModel.find({restuarantId : resturant_id, $or : [{product_name : {$regex : search, $options : 'i'}}]}).sort({product_name : -1})
+        }else{
+            data = await productModel.find({restuarantId : resturant_id, $or : [{product_name : {$regex : search, $options : 'i'}}]}).sort({_id : -1})
+        }
         res.status(200).json({message : "product data", data : data})
     }catch(err){
         res.status(403).json({message : error.message})
