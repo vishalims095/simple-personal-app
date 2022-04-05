@@ -177,18 +177,19 @@ exports.editSubscription = async(req, res) =>{
 }
 exports.getResturantList = async(req, res) =>{
     try{
-        let {sort_type} = req.body
+        let {sort_type, search} = req.body
         console.log(req.body)
         let data = []
         if(sort_type == 'aesc'){
-            data = await resturantModel.find({}).sort({name : 1})    
+            data = await resturantModel.find({$or : [{name : {$regex : search, $options : 'i'}}, {email : {$regex : search, $options : 'i'}}]}).select({name : 1, email : 1, id : 1, address :1, phone : 1, reg_no : 1, createdAt : 1, isVerified : 1, isActive : 1, tax_number : 1, national_id : 1}).sort({name : 1})    
         }else if(sort_type == 'desc'){
-            data = await resturantModel.find({}).sort({name : -1})
+            data = await resturantModel.find({$or : [{name : {$regex : search, $options : 'i'}}, {email : {$regex : search, $options : 'i'}}]}).select({name : 1, email : 1, id : 1, address :1, phone : 1, reg_no : 1, createdAt : 1, isVerified : 1, isActive : 1, tax_number : 1, national_id : 1}).sort({name : -1})
         }else{
-            data = await resturantModel.find({}).sort({_id : -1})
+            data = await resturantModel.find({$or : [{name : {$regex : search, $options : 'i'}}, {email : {$regex : search, $options : 'i'}}]}).select({name : 1, email : 1, id : 1, address :1, phone : 1, reg_no : 1, createdAt : 1, isVerified : 1, isActive : 1, tax_number : 1, national_id : 1}).sort({_id : -1})
         }
         res.status(200).json({message : "Resturant list", data : data})
     }catch(error){
+        console.log(error)
         res.status(403).json({message : error.message})
     }
 }
