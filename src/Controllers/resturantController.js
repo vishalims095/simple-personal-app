@@ -161,7 +161,8 @@ exports.addCategory = async(req, res) =>{
 
 exports.categoryList = async(req, res) =>{
     try{
-        let data = await categoryModel.find({}).sort({_id : -1})
+        let {restuarantId} = req.body
+        let data = await categoryModel.find({restuarantId : restuarantId}).sort({_id : -1})
         res.status(200).json({message : "Category data", data : data})
     }catch(error){
         res.status(403).json({message : error.message})
