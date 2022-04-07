@@ -5,6 +5,7 @@ const {subscriptionModel} = require('../Models/subscriptionModel')
 const {categoryModel} = require ('../Models/categoryModel')
 const {productModel} = require ('../Models/productModel')
 const mongoose = require('mongoose')
+const {offerModel} = require('../Models/offerModel')
 exports.resturantSignup = async(req, res) =>{
     try{
         let {name, address, email,tax_number, national_id, national_id_img, phone, subscriptionId, password, tax_certificate, commercial_image, reg_no, theme} = req.body
@@ -279,6 +280,62 @@ exports.getProductDetails = async(req, res) =>{
         }
         res.status(200).json({message : "product details", data : data})
     }catch(err){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.addOffer = async(req, res) =>{
+    try{
+        let {restuarantId, offer_name, offer_tenure, offer_price, offer_details} = req.body
+        let data = req.body
+        let createOffer = new offerModel(data)
+        let saveOffer = await createOffer.save()
+        if(!createOffer){
+            throw new Error('Unable to create offer')
+        } res.status(200).json({message : "Offer created",data : saveOffer})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.offerList = async(req, res) =>{
+    try{
+        let {restuarantId, offer_id} = req.body
+        if(offer_id){
+            let data = await offerModel.findOne({_id : offer_id}).sort({_id : -1})
+            if(!data){
+                throw new error('Invalid id')
+            }
+            return res.status(200).json({message : "Offer data", data : data})    
+        }
+        let data = await offerModel.find({restuarantId : restuarantId}).sort({_id : -1})
+        res.status(200).json({message : "Offer list", data : data})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+
+exports.updateOffer = async(req, res) =>{
+    try{
+        let {offerId, restuarantId, offer_name, offer_tenure, offer_price, offer_details} = req.body
+        let data = req.body
+        let updateOffer = await offerModel.findOneAndUpdate({_id : offerId}, data, {new : true})
+        if(!updateOffer){
+            throw new Error('Unable to update offer')
+        }
+        res.status(200).json({message : "Offer updated", data : updateOffer})
+    }catch(error){
+        res.status(403).json({message : error.message})
+    }
+}
+
+exports.removeOffer = async(req, res) =>{
+    try{
+        let {offerId} = req.body
+        let removeOffer = await offerModel.remove({_id : offerId})
+        res.status(200).json({message : "Offer removed", data : {}})
+    }catch(error){
         res.status(403).json({message : error.message})
     }
 }
